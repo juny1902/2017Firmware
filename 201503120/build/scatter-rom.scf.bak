@@ -1,0 +1,49 @@
+;;   
+     
+;;   created by jhkim from Huins Ltd.
+;;   
+;;   
+
+
+RAM_LOAD 0x00000000 0x20000000
+{
+    CODE_EXEC 0x00000000 0x20000000
+    {
+        vectors.o (Vect, +First)
+        init.o	(+RO)     ;vectors.o의 Vect 영역은 주소 0x0000에 배치
+        __main.o (+RO)
+        *  (Region$$Table)	; RO/RW addresses to copy   복사하거나 압축을 해제할 코드 및 데이터의 주소가 포함된 Region$$Table 섹션
+        *  (ZISection$$Table)	; ZI addresses to zero
+        ; Replace above with "*(InRoot$$Sections)" in RVDS2.1
+        ;* (+RO)
+    }
+
+    DATA_EXEC 0xa5000000
+    {
+        * (+RO)
+        * (+RW,+ZI)
+    }
+}
+
+
+
+
+;RAM_LOAD 0xa0000000 0x2000000                                  
+;{                                                               
+;    CODE_EXEC 0xa0000000 0x2000000                             
+;    {                                                           
+;        vectors.o (Vect, +First)                                
+;        init.o	(+RO)                                           
+;        __main.o (+RO)                                          
+;        *  (Region$$Table)	; RO/RW addresses to copy       
+;        *  (ZISection$$Table)	; ZI addresses to zero          
+;        ; Replace above with "*(InRoot$$Sections)" in RVDS2.1   
+;        ;* (+RO)                                                
+;    }                                                           
+;                                                                
+;    DATA_EXEC +0                                        
+;    {                                                           
+;        * (+RO)                                                 
+;        * (+RW,+ZI)                                             
+;    }                                                           
+;}                                                               

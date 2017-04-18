@@ -1,0 +1,43 @@
+
+;RAM_LOAD 0x00000000 0x20000000
+;{
+;    CODE_EXEC 0x00000000 0x20000000
+;    {
+;        vectors.o (Vect, +First)
+;        init.o	(+RO)
+;        __main.o (+RO)
+;        *  (Region$$Table)	; RO/RW addresses to copy
+;        *  (ZISection$$Table)	; ZI addresses to zero
+;        ; Replace above with "*(InRoot$$Sections)" in RVDS2.1
+;        ;* (+RO)
+;    }
+;
+;    DATA_EXEC 0xa0000000
+;    {
+;        * (+RO)
+;        * (+RW,+ZI)
+;    }
+;}
+
+
+
+
+RAM_LOAD 0xa0000000 0x4000000                                  
+{                                                               
+    CODE_EXEC 0xa0000000 0x10000                             
+    {                                                           
+        vectors.o (Vect, +First)                                
+        init.o	(+RO)                                           
+        __main.o (+RO)                                          
+        *  (Region$$Table)	; RO/RW addresses to copy       
+        *  (ZISection$$Table)	; ZI addresses to zero          
+        ; Replace above with "*(InRoot$$Sections)" in RVDS2.1   
+        ;* (+RO)                                                
+    }                                                           
+                                                                
+    DATA_EXEC +0                                        
+    {                                                           
+        * (+RO)                                                 
+        * (+RW,+ZI)                                             
+    }                                                           
+}                                                               

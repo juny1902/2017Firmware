@@ -1,0 +1,426 @@
+; Description:  This file contains register base addresses and offsets
+;				 and access macros for the PXA255 on-chip peripherals
+;
+
+	INCLUDE bits
+
+;---------------------------------------
+; Memory Controller - offsets and bit 
+MSC_BASE	EQU		0x48000000
+;MSC_REG(_x_)	EQU	*(vulong *)(MSC_BASE + _x_)	
+
+;---------------------------------------
+; LCD Controller
+LCD_BASE	EQU		0x44000000
+;LCD_REG(_x_)	EQU	*(vulong *)(LCD_BASE + _x_)	
+
+;---------------------------------------
+; DMA Controller
+DMA_BASE	EQU		0x40000000
+;DMA_REG(_x_)	EQU	*(vulong *)(DMA_BASE + _x_)	
+DMA_DCSR0    	EQU	0x000		; DMA Control / Status Register for Channel 0  		
+DMA_DCSR1    	EQU	0x004		; DMA Control / Status Register for Channel 1  		
+DMA_DCSR2    	EQU	0x008		; DMA Control / Status Register for Channel 2  		
+DMA_DCSR3    	EQU	0x00c		; DMA Control / Status Register for Channel 3  		
+DMA_DCSR4    	EQU	0x010		; DMA Control / Status Register for Channel 4  		
+DMA_DCSR5    	EQU	0x014		; DMA Control / Status Register for Channel 5  		
+DMA_DCSR6    	EQU	0x018		; DMA Control / Status Register for Channel 6  		
+DMA_DCSR7    	EQU	0x01c		; DMA Control / Status Register for Channel 7  		
+DMA_DCSR8    	EQU	0x020		; DMA Control / Status Register for Channel 8  		
+DMA_DCSR9    	EQU	0x024		; DMA Control / Status Register for Channel 9  		
+DMA_DCSR10   	EQU	0x028		; DMA Control / Status Register for Channel 10  		
+DMA_DCSR11   	EQU	0x02c		; DMA Control / Status Register for Channel 11  		
+DMA_DCSR12   	EQU	0x030		; DMA Control / Status Register for Channel 12  		
+DMA_DCSR13   	EQU	0x034		; DMA Control / Status Register for Channel 13  		
+DMA_DCSR14   	EQU	0x038		; DMA Control / Status Register for Channel 14  		
+DMA_DCSR15   	EQU	0x03c		; DMA Control / Status Register for Channel 15  		
+DMA_DINT     	EQU	0x0f0		; DMA Interrupt Register  		
+DMA_DRCMR0   	EQU	0x100		; Request to Channel Map Register for DREQ 0 (companion chip request 0)  		
+DMA_DRCMR1   	EQU	0x104		; Request to Channel Map Register for DREQ 1 (companion chip request 1)  		
+DMA_DRCMR2   	EQU	0x108		; Request to Channel Map Register for I2S receive Request  		
+DMA_DRCMR3   	EQU	0x10c		; Request to Channel Map Register for I2S transmit Request  		
+DMA_DRCMR4   	EQU	0x110		; Request to Channel Map Register for BTUART receive Request  		
+DMA_DRCMR5   	EQU	0x114		; Request to Channel Map Register for BTUART transmit Request.  		
+DMA_DRCMR6   	EQU	0x118		; Request to Channel Map Register for FFUART receive Request  		
+DMA_DRCMR7   	EQU	0x11c		; Request to Channel Map Register for FFUART transmit Request  		
+DMA_DRCMR8   	EQU	0x120		; Request to Channel Map Register for AC97 microphone Request  		
+DMA_DRCMR9   	EQU	0x124		; Request to Channel Map Register for AC97 modem receive Request  		
+DMA_DRCMR10  	EQU	0x128		; Request to Channel Map Register for AC97 modem transmit Request  		
+DMA_DRCMR11  	EQU	0x12c		; Request to Channel Map Register for AC97 audio receive Request  		
+DMA_DRCMR12  	EQU	0x130		; Request to Channel Map Register for AC97 audio transmit Request  		
+DMA_DRCMR13  	EQU	0x134		; Request to Channel Map Register for SSP receive Request  		
+DMA_DRCMR14  	EQU	0x138		; Request to Channel Map Register for SSP transmit Request  		
+DMA_DRCMR15  	EQU	0x13c		; Reserved  		
+DMA_DRCMR16  	EQU	0x140		; Reserved  		
+DMA_DRCMR17  	EQU	0x144		; Request to Channel Map Register for ICP receive Request  		
+DMA_DRCMR18  	EQU	0x148		; Request to Channel Map Register for ICP transmit Request  		
+DMA_DRCMR19  	EQU	0x14c		; Request to Channel Map Register for STUART receive Request  		
+DMA_DRCMR20  	EQU	0x150		; Request to Channel Map Register for STUART transmit Request  		
+DMA_DRCMR21  	EQU	0x154		; Request to Channel Map Register for MMC receive Request  		
+DMA_DRCMR22  	EQU	0x158		; Request to Channel Map Register for MMC transmit Request  		
+DMA_DRCMR23  	EQU	0x15c		; RESERVED
+DMA_DRCMR24  	EQU	0x160		; RESERVED
+DMA_DRCMR25  	EQU	0x164		; Request to Channel Map Register for USB endpoint 1 Request
+DMA_DRCMR26  	EQU	0x168		; Request to Channel Map Register for USB endpoint 2 Request
+DMA_DRCMR27  	EQU	0x16c		; Request to Channel Map Register for USB endpoint 3 Request
+DMA_DRCMR28  	EQU	0x170		; Request to Channel Map Register for USB endpoint 4 Request
+DMA_DRCMR29  	EQU	0x174		; RESERVED
+DMA_DRCMR30  	EQU	0x178		; Request to Channel Map Register for USB endpoint 6 Request
+DMA_DRCMR31  	EQU	0x17c		; Request to Channel Map Register for USB endpoint 7 Request
+DMA_DRCMR32  	EQU	0x180		; Request to Channel Map Register for USB endpoint 8 Request
+DMA_DRCMR33  	EQU	0x184		; Request to Channel Map Register for USB endpoint 9 Request
+DMA_DRCMR34  	EQU	0x188		; RESERVED
+DMA_DRCMR35  	EQU	0x18c		; Request to Channel Map Register for USB endpoint 11 Request
+DMA_DRCMR36  	EQU	0x190		; Request to Channel Map Register for USB endpoint 12 Request
+DMA_DRCMR37  	EQU	0x194		; Request to Channel Map Register for USB endpoint 13 Request
+DMA_DRCMR38  	EQU	0x198		; Request to Channel Map Register for USB endpoint 14 Request
+DMA_DRCMR39  	EQU	0x19c		; RESERVED
+DMA_DDADR0   	EQU	0x200		; DMA Descriptor Address Register channel 0
+DMA_DSADR0   	EQU	0x204		; DMA Source Address Register channel 0
+DMA_DTADR0   	EQU	0x208		; DMA Target Address Register channel 0
+DMA_DCMD0    	EQU	0x20c		; DMA Command Address Register channel 0
+DMA_DDADR1   	EQU	0x210		; DMA Descriptor Address Register channel 1
+DMA_DSADR1   	EQU	0x214		; DMA Source Address Register channel 1
+DMA_DTADR1   	EQU	0x218		; DMA Target Address Register channel 1
+DMA_DCMD1    	EQU	0x21c		; DMA Command Address Register channel 1
+DMA_DDADR2   	EQU	0x220		; DMA Descriptor Address Register channel 2
+DMA_DSADR2   	EQU	0x224		; DMA Source Address Register channel 2
+DMA_DTADR2   	EQU	0x228		; DMA Target Address Register channel 2
+DMA_DCMD2    	EQU	0x22c		; DMA Command Address Register channel 2
+DMA_DDADR3   	EQU	0x230		; DMA Descriptor Address Register channel 3
+DMA_DSADR3   	EQU	0x234		; DMA Source Address Register channel 3
+DMA_DTADR3   	EQU	0x238		; DMA Target Address Register channel 3
+DMA_DCMD3    	EQU	0x23c		; DMA Command Address Register channel 3
+DMA_DDADR4   	EQU	0x240		; DMA Descriptor Address Register channel 4
+DMA_DSADR4   	EQU	0x244		; DMA Source Address Register channel 4
+DMA_DTADR4   	EQU	0x248		; DMA Target Address Register channel 4
+DMA_DCMD4    	EQU	0x24c		; DMA Command Address Register channel 4
+DMA_DDADR5   	EQU	0x250		; DMA Descriptor Address Register channel 5
+DMA_DSADR5   	EQU	0x254		; DMA Source Address Register channel 5
+DMA_DTADR5   	EQU	0x258		; DMA Target Address Register channel 5
+DMA_DCMD5    	EQU	0x25c		; DMA Command Address Register channel 5
+DMA_DDADR6   	EQU	0x260		; DMA Descriptor Address Register channel 6
+DMA_DSADR6   	EQU	0x264		; DMA Source Address Register channel 6
+DMA_DTADR6   	EQU	0x268		; DMA Target Address Register channel 6
+DMA_CMD6     	EQU	0x26c		; DMA Command Address Register channel 6
+DMA_DADR7    	EQU	0x270		; DMA Descriptor Address Register channel 7
+DMA_SADR7    	EQU	0x274		; DMA Source Address Register channel 7
+DMA_TADR7    	EQU	0x278		; DMA Target Address Register channel 7
+DMA_CMD7     	EQU	0x27c		; DMA Command Address Register channel 7
+DMA_DADR8    	EQU	0x280		; DMA Descriptor Address Register channel 8
+DMA_SADR8    	EQU	0x284		; DMA Source Address Register channel 8
+DMA_TADR8    	EQU	0x288		; DMA Target Address Register channel 8
+DMA_CMD8     	EQU	0x28c		; DMA Command Address Register channel 8
+DMA_DADR9    	EQU	0x290		; DMA Descriptor Address Register channel 9
+DMA_SADR9    	EQU	0x294		; DMA Source Address Register channel 9
+DMA_TADR9    	EQU	0x298		; DMA Target Address Register channel 9
+DMA_CMD9     	EQU	0x29c		; DMA Command Address Register channel 9
+DMA_DADR10   	EQU	0x2a0		; DMA Descriptor Address Register channel 10
+DMA_SADR10   	EQU	0x2a4		; DMA Source Address Register channel 10
+DMA_TADR10   	EQU	0x2a8		; DMA Target Address Register channel 10
+DMA_CMD10    	EQU	0x2ac		; DMA Command Address Register channel 10
+DMA_DADR11   	EQU	0x2b0		; DMA Descriptor Address Register channel 11
+DMA_SADR11   	EQU	0x2b4		; DMA Source Address Register channel 11
+DMA_TADR11   	EQU	0x2b8		; DMA Target Address Register channel 11
+DMA_CMD11    	EQU	0x2bc		; DMA Command Address Register channel 11
+DMA_DADR12   	EQU	0x2c0		; DMA Descriptor Address Register channel 12
+DMA_SADR12   	EQU	0x2c4		; DMA Source Address Register channel 12     
+DMA_TADR12   	EQU	0x2c8		; DMA Target Address Register channel 12     
+DMA_CMD12    	EQU	0x2cc		; DMA Command Address Register channel 12     
+DMA_DADR13   	EQU	0x2d0		; DMA Descriptor Address Register channel 13     
+DMA_SADR13   	EQU	0x2d4		; DMA Source Address Register channel 13     
+DMA_TADR13   	EQU	0x2d8		; DMA Target Address Register channel 13     
+DMA_CMD13    	EQU	0x2dc		; DMA Command Address Register channel 13     
+DMA_DADR14   	EQU	0x2e0		; DMA Descriptor Address Register channel 14     
+DMA_SADR14   	EQU	0x2e4		; DMA Source Address Register channel 14     
+DMA_TADR14   	EQU	0x2e8		; DMA Target Address Register channel 14     
+DMA_CMD14    	EQU	0x2ec		; DMA Command Address Register channel 14     
+DMA_DADR15   	EQU	0x2f0		; DMA Descriptor Address Register channel 15     
+DMA_SADR15   	EQU	0x2f4		; DMA Source Address Register channel 15     
+DMA_TADR15   	EQU	0x2f8		; DMA Target Address Register channel 15     
+DMA_CMD15    	EQU	0x2fc		; DMA Command Address Register channel 15     
+
+;---------------------------------------
+;     UARTs
+
+FF_UART_BASE		EQU  	0x40100000	; Full Function UART Base Address
+;FF_UART_REG(_x_)	EQU  	*(vulong *)(FF_UART_BASE + _x_)	
+BT_UART_BASE		EQU  	0x40200000	; Bluetooth UART Base Address
+;BT_UART_REG(_x_)	EQU  	*(vulong *)(BT_UART_BASE + _x_)	
+STD_UART_BASE		EQU  	0x40700000	; Standard UART Base Address
+;STD_UART_REG(_x_)	EQU  	*(vulong *)(STD_UART_BASE + _x_)	
+
+UART_RBR      	EQU	0x00        ; Receive Buffer Register (read only)     
+UART_THR      	EQU	0x00        ; Transmit Holding Register (write only)     
+UART_IER      	EQU	0x04        ; Interrupt Enable Register (read/write)     
+UART_IIR      	EQU	0x08        ; Interrupt ID Register (read only)     
+UART_FCR      	EQU	0x08        ; FIFO Control Register (write only)     
+UART_LCR      	EQU	0x0C        ; Line Control Register (read/write)     
+UART_MCR      	EQU	0x10        ; Modem Control Register (read/write)     
+UART_LSR      	EQU	0x14        ; Line Status Register (read only)     
+UART_MSR      	EQU	0x18        ; Modem Status Register (read only)     
+UART_SPR      	EQU	0x1C        ; Scratch Pad Register (read/write)     
+UART_DLL      	EQU	0x00        ; Baud divisor lower byte (read/write)     
+UART_DLH      	EQU	0x04        ; Baud divisor higher byte (read/write)     
+UART_ISR      	EQU	0x20        ; Infrared Select Register (read/write)     
+
+;---------------------------------------
+;     I2C
+
+I2C_BASE	EQU		0x40301680
+;I2C_REG(_x_)	EQU	*(vulong *)(I2C_BASE + _x_)
+
+I2C_ISAR	EQU	0x20		; I2C Slave Address Register	
+I2C_ICR	EQU		0x10		; I2C Control Register
+I2C_IDBR	EQU	0x08		; I2C Data Buffer Register
+I2C_ISR	EQU		0X18
+
+;---------------------------------------
+;     I2S
+
+I2S_BASE		EQU     0x40400000   
+;I2S_REG(_x_)	EQU    	*(vulong *)(I2S_BASE + _x_)	
+I2S_SACR0   	EQU     0x00        ; Global Control Register
+I2S_SACR1   	EQU     0x04        ; Serial Audio I2S/MSB-Justified Control Register
+I2S_SASR0   	EQU     0x0C        ; Serial Audio I2S/MSB-Justified Interface and FIFO Status Register
+I2S_SAIMR   	EQU     0x14        ; Serial Audio Interrupt Mask Register
+I2S_SAICR   	EQU     0x18        ; Serial Audio Interrupt Clear Register
+I2S_SAITR   	EQU     0x5C        ; Serial Audio Interrupt Test Register
+I2S_SADIV   	EQU     0x60        ; Audio clock divider register. See section Section 12.3
+			        	; Serial Audio Clocks and Sampling Frequencies on page 12-7.
+I2S_SADR    	EQU     0x80        ; Serial Audio Data Register (TX and RX FIFO access register).
+
+;---------------------------------------
+;     AC97
+
+AC97_BASE	EQU	0x40500000   
+;AC97_REG(_x_)	EQU	*(vulong *)(AC97_BASE + _x_)	
+AC97_POCR      EQU  	0x000       ; PCM Out Control Register
+AC97_PICR      EQU  	0x004       ; PCM In Control Register
+AC97_MCCR      EQU  	0x008       ; Mic In Control Register
+AC97_GCR       EQU  	0x00C       ; Global Control Register 
+AC97_POSR      EQU  	0x010       ; PCM Out Status Register
+AC97_PISR      EQU  	0x014       ; PCM In Status Register
+AC97_MCSR      EQU  	0x018       ; Mic In Status Register
+AC97_GSR       EQU  	0x01C       ; Global Status Register 
+AC97_CAR       EQU  	0x020       ; CODEC Access Register 
+AC97_PCDR      EQU 	0x040       ; PCM FIFO Data Register 
+AC97_MCDR      EQU 	0x060       ; Mic-in FIFO Data Register 
+AC97_MOCR      EQU 	0x100       ; MODEM Out Control Register
+AC97_MICR      EQU 	0x108       ; MODEM In Control Register
+AC97_MOSR      EQU 	0x110       ; MODEM Out Status Register
+AC97_MISR      EQU 	0x118       ; MODEM In Status Register
+AC97_MODR      EQU 	0x140       ; MODEM FIFO Data Register
+
+;---------------------------------------
+;     UDC
+
+USB_BASE	EQU	0x40600000   
+;USB_REG(_x_)	EQU	*(vulong *)(USB_BASE + _x_)	
+USB_UDCCR      EQU		0x000          	; UDC control register
+USB_UDCCS0     EQU		0x010          	; UDC Endpoint 0 Control/Status Register
+USB_UDCCS1     EQU		0x014          	; UDC Endpoint 1 (IN) Control/Status Register
+USB_UDCCS2     EQU		0x018          	; UDC Endpoint 2 (OUT) Control/Status Register
+USB_UDCCS3     EQU		0x01C          	; UDC Endpoint 3 (IN) Control/Status Register
+USB_UDCCS4     EQU		0x020          	; UDC Endpoint 4 (OUT) Control/Status Register
+USB_UDCCS5     EQU		0x024          	; UDC Endpoint 5 (Interrupt) Control/Status Register
+USB_UDCCS6     EQU		0x028          	; UDC Endpoint 6 (IN) Control/Status Register
+USB_UDCCS7     EQU		0x02C          	; UDC Endpoint 7 (OUT) Control/Status Register
+USB_UDCCS8     EQU		0x030          	; UDC Endpoint 8 (IN) Control/Status Register
+USB_UDCCS9     EQU		0x034          	; UDC Endpoint 9 (OUT) Control/Status Register
+USB_UDCCS10    EQU		0x038          	; UDC Endpoint 10 (Interrupt) Control/Status Register
+USB_UDCCS11    EQU		0x03C          	; UDC Endpoint 11 (IN) Control/Status Register
+USB_UDCCS12    EQU		0x040          	; UDC Endpoint 12 (OUT) Control/Status Register
+USB_UDCCS13    EQU		0x044          	; UDC Endpoint 13 (IN) Control/Status Register
+USB_UDCCS14    EQU		0x048          	; UDC Endpoint 14 (OUT) Control/Status Register
+USB_UDCCS15    EQU		0x04C          	; UDC Endpoint 15 (Interrupt) Control/Status Register
+USB_UICR0      EQU		0x050          	; UDC Interrupt Control Register 0
+USB_UICR1      EQU		0x054          	; UDC Interrupt Control Register 1
+USB_USIR0      EQU		0x058          	; UDC Status Interrupt Register 0
+USB_USIR1      EQU		0x05C          	; UDC Status Interrupt Register 1
+USB_UFNRH      EQU		0x060          	; UDC Frame Number Register High
+USB_UFNRL      EQU		0x064          	; UDC Frame Number Register Low
+USB_UDDR0      EQU		0x080          	; UDC Endpoint 0 Data Register
+USB_UDDR1      EQU		0x100          	; UDC Endpoint 1 Data Register
+USB_UDDR2      EQU		0x1C0          	; UDC Endpoint 2 Data Register
+USB_UDDR3      EQU		0x200          	; UDC Endpoint 3 Data Register
+USB_UDDR4      EQU		0x400          	; UDC Endpoint 4 Data Register
+USB_UDDR5      EQU		0x0A0          	; UDC Endpoint 5 Data Register
+USB_UDDR6      EQU		0x600          	; UDC Endpoint 6 Data Register
+USB_UDDR7      EQU		0x680          	; UDC Endpoint 7 Data Register
+USB_UDDR8      EQU		0x700          	; UDC Endpoint 8 Data Register
+USB_UDDR9      EQU		0xA00          	; UDC Endpoint 9 Data Register
+USB_UDDR10     EQU		0x0C0          	; UDC Endpoint 10 Data Register
+USB_UDDR11     EQU		0xB00          	; UDC Endpoint 11 Data Register
+USB_UDDR12     EQU		0xB80          	; UDC Endpoint 12 Data Register
+USB_UDDR13     EQU		0xC00          	; UDC Endpoint 13 Data Register
+USB_UDDR14     EQU		0xE00          	; UDC Endpoint 14 Data Register
+USB_UDDR15     EQU		0x0E0          	; UDC Endpoint 15 Data Register
+                   
+;----------------;-----------------------
+;   Fast Infrared;   UART
+
+IRDA_BASE	EQU	0x40800000  
+;IRDA_REG(_x_)	EQU	*(vulong *)(IRDA_BASE + _x_)	
+IRDA_ICCR0     EQU 	0x00          	; ICP control register 0
+IRDA_ICCR1     EQU 	0x04          	; ICP control register 1
+IRDA_ICCR2     EQU 	0x08          	; ICP control register 2
+IRDA_ICDR      EQU 	0x0C          	; ICP data register
+IRDA_ICSR0     EQU 	0x14          	; ICP status register 0
+IRDA_ICSR1     EQU 	0x18          	; ICP status register 1
+
+;---------------------------------------
+;     RTC
+
+RTC_BASE	EQU		0x40900000   
+;RTC_REG(_x_)	EQU	*(vulong *)(RTC_BASE + _x_)	
+RTC_RCNR       EQU		0x00          	; RTC count register
+RTC_RTAR       EQU		0x04          	; RTC alarm register
+RTC_RTSR       EQU		0x08          	; RTC status register
+RTC_RTTR       EQU		0x0C          	; RTC timer trim register
+
+;---------------------------------------
+;     OS Timer
+TMR_BASE	EQU		0x40A00000   
+;TMR_REG(_x_)	EQU	*(vulong *)(TMR_BASE + _x_)	
+TMR_OSMR0      EQU		0x00          	; OS timer match registers<3:0>
+TMR_OSMR1      EQU		0x04          	;
+TMR_OSMR2      EQU		0x08          	;
+TMR_OSMR3      EQU		0x0C          	;
+TMR_OSCR       EQU		0x10          	; OS timer counter register
+TMR_OSSR       EQU		0x14          	; OS timer status register
+TMR_OWER       EQU		0x18          	; OS timer watchdog enable register
+TMR_OIER       EQU		0x1C          	; OS timer interrupt enable register
+
+;---------------------------------------
+;     PWM 
+PWM0_BASE	EQU	0x40B00000  
+;PWM0_REG(_x_)	EQU	*(vulong *)(PWM0_BASE + _x_)	
+PWM1_BASE	EQU	0x40C00000  
+;PWM1_REG(_x_)	EQU	*(vulong *)(PWM1_BASE + _x_)	
+PWM_PWMCTRL   	EQU	0x00          	; PWM Control Register
+PWM_PWDUTY    	EQU	0x04          	; PWM Duty Cycle Register
+PWM_PERVAL    	EQU	0x08          	; PWM Period Control Register
+
+;---------------------------------------
+;     Interrupt Control   
+INT_BASE   	EQU	0x40D00000      ; Interrupt controller IRQ pending register
+;INT_REG(_x_)	EQU	*(vulong *)(INT_BASE + _x_)	
+INT_ICIP       EQU		0x00      		; Interrupt controller IRQ pending register
+INT_ICMR       EQU		0x04      		; Interrupt controller mask register
+INT_ICLR       EQU		0x08      		; Interrupt controller level register
+INT_ICFP       EQU		0x0C      		; Interrupt controller FIQ pending register
+INT_ICPR       EQU		0x10      		; Interrupt controller pending register
+INT_ICCR       EQU		0x14      		; Interrupt controller control register
+
+;---------------------------------------
+; GPIO - Register offsets and bit 
+GPIO_BASE	EQU	0x40E00000
+;GPIO_REG(_x_)	EQU	*(vulong *)(GPIO_BASE + _x_)	
+
+;---------------------------------------
+;     Power Manager and Reset Control
+PWR_CTL_BASE	EQU	0x40F00000  	 
+;PWR_REG(_x_)	EQU	*(vulong *)(PWR_CTL_BASE + _x_)	
+PWR_PMCR       EQU		0x00      ; Power Manager Control register
+PWR_PSSR       EQU		0x04      ; Power Manager Sleep Status register
+PWR_PSPR       EQU		0x08      ; Power Manager Scratch Pad register
+PWR_PWER       EQU		0x0C      ; Power Manager Wake-up Enable register
+PWR_PRER       EQU		0x10      ; Power Manager GPIO Rising-edge Detect Enable register
+PWR_PFER       EQU		0x14      ; Power Manager GPIO Falling-edge Detect Enable register
+PWR_PEDR       EQU		0x18      ; Power Manager GPIO Edge Detect Status register
+PWR_PCFR       EQU		0x1C      ; Power Manager General Configuration register
+PWR_PGSRx      EQU		0x20      ; Power Manager GPIO Sleep State register for GP[31-0]
+PWR_PGSRy      EQU		0x24      ; Power Manager GPIO Sleep State register for GP[63-32]
+PWR_PGSRz      EQU		0x28      ; Power Manager GPIO Sleep State register for GP[84-64]
+PWR_RCSR       EQU		0x30      ; Reset controller status register
+
+;---------------------------------------
+;     Clocks Manager
+CLK_BASE	EQU	0x41300000   
+;CLK_REG(_x_)	EQU	*(vulong *)(CLK_BASE + _x_)	
+CLK_CCCR       EQU		0x00          ; Core Clock Configuration Register
+CLK_CKEN       EQU		0x04          ; Clock Enable Register
+CLK_OSCC       EQU		0x08          ; Oscillator Configuration Register
+
+;---------------------------------------
+;     SSP
+SSP_BASE	EQU	0x41000000  
+;SSP_REG(_x_)	EQU	*(vulong *)(SSP_BASE + _x_)	
+SSP_SSCR0      EQU		0x00          	; SSP Control Register 0
+SSP_SSCR1      EQU		0x04          	; SSP Control Register 1 
+SSP_SSSR       EQU		0x08          	; SSP Status Register
+SSP_SSITR      EQU		0x0C          	; SSP Interrupt Test Register
+SSP_SSDR       EQU		0x10          	; SSP Data Write Register/SSP Data Read Register
+
+;---------------------------------------
+;     MMC 
+MMC_BASE	EQU	0x41100000  
+;MMC_REG(_x_)	  EQU	*(vulong *)(MMC_BASE + _x_)	
+MMC_MMCSTRPCL    EQU		0x00          	; Control to start and stop MMC clock	
+MMC_MMCSTAT      EQU		0x04          	; MMC status register (read only)	
+MMC_MMCCLKRT     EQU		0x08          	; MMC clock rate 	
+MMC_MMCSPI       EQU		0x0c          	; SPI mode control bits	
+MMC_MMCCMDAT     EQU		0x10          	; Command/response/data sequence control	
+MMC_MMCRESTO     EQU		0x14          	; Expected response time out	
+MMC_MMCRDTO      EQU		0x18          	; Expected data read time out	
+MMC_MMCBLKLEN    EQU		0x1c          	; Block length of data transaction	
+MMC_MMCNOB       EQU		0x20          	; "Number of blocksfor block mode"	
+MMC_MMCPRTBUF    EQU		0x24          	; Partial MMC_TXFIFO FIFO written	
+MMC_MMCIMASK     EQU		0x28          	; Interrupt Mask	
+MMC_MMCIREG      EQU		0x2c          	; Interrupt Register (read only)	
+MMC_MMCCMD       EQU		0x30          	; Index of current command	
+MMC_MMCARGH      EQU		0x34          	; MSW part of the current command argument	
+MMC_MMCARGL      EQU		0x38          	; LSW part of the current command argument	
+MMC_MMCRES       EQU		0x3c          	; Response FIFO (read only)	
+MMC_MMCRXFIFO    EQU		0x40          	; Receive FIFO (read only)	
+MMC_MMCTXFIFO    EQU		0x44          	; Transmit FIFO (write only)	
+                 
+;----------------------------------------
+;    Interrupt Source
+INT_HWUART	EQU	7
+INT_GPIO0	EQU	8
+INT_GPIO1	EQU	9
+INT_GPIO2_84	EQU	10
+INT_USB_SLAVE	EQU	11
+INT_PMU	EQU		12
+INT_I2S	EQU		13
+INT_AC97	EQU	14
+INT_NSSP	EQU	16
+INT_LCD	EQU		17
+INT_I2C	EQU		18
+INT_ICP	EQU		19
+INT_STUART	EQU	20
+INT_BTUART	EQU	21
+INT_FFUART	EQU	22
+INT_MMC	EQU		23
+INT_SSP	EQU		24
+INT_DMA	EQU		25
+INT_OSTIMER_M0	EQU	26
+INT_OSTIMER_M1	EQU	27
+INT_OSTIMER_M2	EQU	28
+INT_OSTIMER_M3	EQU	29
+INT_RTC_HZ	EQU	30
+INT_RTC_ALARM	EQU	31
+                  
+DMA_CH0	EQU		BIT0
+DMA_CH1	EQU		BIT1
+DMA_CH2	EQU		BIT2
+DMA_CH3	EQU		BIT3
+DMA_CH4	EQU		BIT4
+DMA_CH5	EQU		BIT5
+DMA_CH6	EQU		BIT6
+DMA_CH7	EQU		BIT7
+DMA_CH8	EQU		BIT8
+DMA_CH9	EQU		BIT9
+DMA_CH10	EQU	BIT10
+DMA_CH11	EQU	BIT11
+DMA_CH12	EQU	BIT12
+DMA_CH13	EQU	BIT13
+DMA_CH14	EQU	BIT14
+DMA_CH15	EQU	BIT15
+;------------------------------------------------
+; Bring in the individual peripheral files here
+	INCLUDE pxa255_msc
+
+	END

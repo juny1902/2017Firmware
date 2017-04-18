@@ -1,0 +1,76 @@
+170307 - 펌웨어설계
+
+주의
+
+1. 보드에 정전기, 쇼트 주의 (도선에 손대지 말것)
+
+2. 전원 입력/제거시 스파크 주의
+
+3. 수업전 미리 보드 연결해두기
+
+
+To do
+
+1. PC에는 필요한 소프트웨어 전부 설치하기
+
+2. 실행파일 받아서 보드에 Write 하기
+
+3. 빈소스 컴파일 해보기
+
+
+설치 과정
+
+1.JFLASH_MM 설치 (보드에 올리는 툴)
+ㄴ 설치파일 설치
+ㄴ 포함된 DATA 파일 설치폴더에 복사(덮어쓰기)
+ㄴ giveio 3개 복사 -> C:\Windows\System32\drivers
+
+2.ADS 설치 (ARM IDE 구성, X-compiler)
+ㄴ ADSV1_2_B805 -> Setup 실행
+ㄴ 중간에 Full 선택후 설치 진행
+ㄴ 라이센스 -> Install License -> 크랙폴더 license.dat 선택
+ㄴ 인증 진행
+
+3.JTAG Driver 설치 (보드와 PC간 연결을 위해 필요함)
+ㄴ cmd -> hdwwiz.exe 실행
+ㄴ 목록에서 직접 선택 -> 포트
+ㄴ ECP 프린터포트 -> 디스크 있음
+ㄴ 1. 과정에서 옮긴 giveio.inf 선택
+ㄴ 설치 진행
+
+4.ADS 설정
+ㄴ codewarrior 실행 (관리자 권한으로 실행)
+ㄴ 프로젝트 생성 (ARM Executable, 폴더명 한글X)
+ㄴ CODE 폴더내 4개 폴더 프로젝트 경로에 옮김 (총 6개의 파일 확인)
+ㄴ 4개 폴더이름과 같이 그룹 생성 (Files 창 빈공간 우클릭)
+ㄴ 그룹에 파일 추가 (각 폴더 내용물) -> 폴더 우클릭후 add files (DebugRel)
+
+ㄴ 첫번째버튼 (Project Setting) 클릭
+ㄴ Target Setting - Postlinker - ARM fromELF
+ㄴ ARM Assembler - XScale, -keep -g -apcs /shlclient -cpu XScale -fpu None
+ㄴ ARM C Complier - XScale, -O1 -g+ -cpu XScale -Wr+ip -Ec
+ㄴ ARM C++ Compiler - XScale
+ㄴ Thumb C Compiler - XScale
+ㄴ ARM Linker - Linktype:Scattered, 프로젝트폴더에 있는 scatter-rom.scf 
+ㄴ ARM Linker - Options - Give.... 체크 , vectors.o 입력
+ㄴ ARM Linker - Listings - 상단4개, 하단 우 2개 체크
+ㄴ 메인폴더의 output.bin 파일을 JFlash_MM 폴더로 복사
+ㄴ ARM fromELF - Output format : Plain ..., Output file name : 위의 output.bin 파일 
+
+
+5.설치 확인
+포팅 : JFlash Window console 실행 -> JFlashmm.exe bulbcx output.bin
+포팅 후 RESET
+
+6.장비 설치
+ㄴ JTAG 케이블 이용하여 PC, 보드간 연결
+ㄴ 상단 JTAG 포트에 연결
+
+7.빌드 과정
+ㄴ 프로젝트 폴더 내 c_code 폴더에 main.c 파일 생성후 c_code 그룹에 추가
+ㄴ 소스 작성
+ㄴ Make 클릭 (F7), Warning OK, Error NO!
+ㄴ output.bin 만들어짐
+
+8. 앞으로는..
+ㄴ main.c 만 수정하며 진행
