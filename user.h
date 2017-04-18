@@ -15,11 +15,11 @@
 #define CCCR (*(volatile int *)0x41300000) 
 #define MDREFR (*(volatile int *)0x048000004)
 
-#define GEDR1 (*(volatile int *)0x40e0004c) // Edge 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙 占쌩곤옙
+#define GEDR1 (*(volatile int *)0x40e0004c) // Edge 
 #define GEDR2 (*(volatile int *)0x40E00050)
-#define GRER1 (*(volatile int *)0x40e00034) // Rising Edge 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙 占쌩곤옙
+#define GRER1 (*(volatile int *)0x40e00034) // Rising Edge
 #define GRER2 (*(volatile int *)0x40E00038)
-#define GFER1 (*(volatile int *)0x40e00040) // Falling Edge 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙 占쌩곤옙
+#define GFER1 (*(volatile int *)0x40e00040) // Falling Edge
 #define GFER2 (*(volatile int *)0x40e00044)
 
 // Numeric definition for LED Control
