@@ -15,11 +15,11 @@
 #define CCCR (*(volatile int *)0x41300000) 
 #define MDREFR (*(volatile int *)0x048000004)
 
-#define GEDR1 (*(volatile int *)0x40e0004c) // Edge 
+#define GEDR1 (*(volatile int *)0x40e0004c) // Edge ���� �������� �߰�
 #define GEDR2 (*(volatile int *)0x40E00050)
-#define GRER1 (*(volatile int *)0x40e00034) // Rising Edge
+#define GRER1 (*(volatile int *)0x40e00034) // Rising Edge ���� �������� �߰�
 #define GRER2 (*(volatile int *)0x40E00038)
-#define GFER1 (*(volatile int *)0x40e00040) // Falling Edge
+#define GFER1 (*(volatile int *)0x40e00040) // Falling Edge ���� �������� �߰�
 #define GFER2 (*(volatile int *)0x40e00044)
 
 // Numeric definition for LED Control
@@ -41,6 +41,12 @@
 #define GET_EDGE_SW1 ((GEDR1) & (0x00200000))
 #define GET_EDGE_SW2 ((GEDR2) & (0x00080000))
 
+// Difinition of Intrrupt Registers
+
+#define ICLR (*(volatile int *)0x40D00008)
+#define ICCR (*(volatile int *)0x40D00014)
+#define ICMR (*(volatile int *)0x40D00004)
+
 // External functions
 extern void vinit(void); // To initialize device
 
@@ -50,4 +56,5 @@ int LED_Control(int CTL,int N); // LED control(N = #LED, CTL = Control)
 void INIT_DEVICE(void); // Initialize device (Set Direction, LED Initialize)
 void Set_Clock(int n); // Set clock frequency ( Range : 2~6 )
 void INIT_EDGE(void);
+void INIT_INTR(void);
 void CLEAR_GEDR(void); // Set 1 on GEDR Bit to clear previous GEDR value.
