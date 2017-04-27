@@ -18,18 +18,19 @@ int flag = 0;
     
     역전현상 : 우선순위가 낮은 프로세스에 높은 프로세스가 지장받음.
 */
-void usr_handle_pjy(unsigned long a)
+void usr_handle_pjy(unsigned long a) // To minimalize routine for ISR, We use flag for each switches.
 {
-	if(GET_EDGE_SW1)
+	if(GET_EDGE_SW1) // When SW1 Edge Detected
 	{
 		flag = 1;
-	} 
-	else if(GET_EDGE_SW2)
+	}
+	else if(GET_EDGE_SW2) // When SW2 Edge Detected
 	{
 		flag = 2;
 	}
+
 	
-    CLEAR_GEDR();
+    CLEAR_GEDR(); // Initialize GEDR To clear previous edge data to avoid refrain ISR.
 }
 //------------------------------ //
 
@@ -43,22 +44,20 @@ int main()
     {
     	if(flag == 1)
     	{
-    		int i;
-			for(i=0;i<2;i++)
-			{
-				LED_Control(BLK,3);
-			}
-			flag = 0;
+			LED_Control(BLK,3);
+			flag = 2;
+			
     	}
     	else if(flag == 2)
     	{
-    		LED_Control(OFF,3);
-    		_delay_ms(2000);
-    		flag = 0;
+    		if(SW1_STAT)
+    			LED_Control(ON,3);
+    		else
+    			flag = 0;
     	}
     	else
     	{
-    		LED_Control(ON,3);
+    		LED_Control(OFF,3);
     	}
     }    
     return 0;
