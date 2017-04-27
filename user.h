@@ -50,6 +50,9 @@
 // External functions
 extern void vinit(void); // To initialize device
 
+// Delay_MS
+void _delay_ms(int v);
+
 // Definition of functions
 int IS_SW_PRESSED(void); // Return integer value by SW
 int LED_Control(int CTL,int N); // LED control(N = #LED, CTL = Control)

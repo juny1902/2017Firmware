@@ -15,9 +15,12 @@
 #define CCCR (*(volatile int *)0x41300000) 
 #define MDREFR (*(volatile int *)0x048000004)
 
-#define GEDR1 (*(volatile int *)0x40e0004c) // GP Edge Detection
-#define GRER1 (*(volatile int *)0x40e00034) // GP Rising Edge
-#define GFER1 (*(volatile int *)0x40e00040) // GP Falling Edge
+#define GEDR1 (*(volatile int *)0x40e0004c) // Edge ���� �������� �߰�
+#define GEDR2 (*(volatile int *)0x40E00050)
+#define GRER1 (*(volatile int *)0x40e00034) // Rising Edge ���� �������� �߰�
+#define GRER2 (*(volatile int *)0x40E00038)
+#define GFER1 (*(volatile int *)0x40e00040) // Falling Edge ���� �������� �߰�
+#define GFER2 (*(volatile int *)0x40e00044)
 
 // Numeric definition for LED Control
 #define BLK 2
@@ -31,15 +34,27 @@
 #define NP 0
 
 // Definition of reading from GPLR registers. 
-#define SW1_STAT (!((GPLR1) & (0x00200000))) // 
-#define SW2_STAT (!((GPLR2) & (0x00080000))) //
-#define INT_SW 1
+#define SW1_STAT (!((GPLR1) & (0x00200000))) // To check SW1 status. (Pressed = 1, Released = 0)
+#define SW2_STAT (!((GPLR2) & (0x00080000))) // To check SW2 status. 
+
+// Definition of getting from GEDR registers.
+#define GET_EDGE_SW1 ((GEDR1) & (0x00200000))
+#define GET_EDGE_SW2 ((GEDR2) & (0x00080000))
+
+// Difinition of Intrrupt Registers
+
+#define ICLR (*(volatile int *)0x40D00008)
+#define ICCR (*(volatile int *)0x40D00014)
+#define ICMR (*(volatile int *)0x40D00004)
 
 // External functions
 extern void vinit(void); // To initialize device
 
 // Definition of functions
 int IS_SW_PRESSED(void); // Return integer value by SW
-int LED_Control(int CTL,int N); // LED control and It return INT_SW(1) when It detected interrupt(while delay)
+int LED_Control(int CTL,int N); // LED control(N = #LED, CTL = Control)
 void INIT_DEVICE(void); // Initialize device (Set Direction, LED Initialize)
 void Set_Clock(int n); // Set clock frequency ( Range : 2~6 )
+void INIT_EDGE(void);
+void INIT_INTR(void);
+void CLEAR_GEDR(void); // Set 1 on GEDR Bit to clear previous GEDR value.

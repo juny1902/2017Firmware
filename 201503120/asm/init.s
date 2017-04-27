@@ -126,7 +126,7 @@ Reset_Handler   FUNCTION
 1
 	ldr r2, [r1, #TMR_OSCR]
 	cmp r4, r2
-	bgt %b1    
+	;bgt %b1    
 	
 ; PXA250 Memory Controller를 초기화 한다.                     
                                                               
@@ -212,7 +212,7 @@ Reset_Handler   FUNCTION
 1
 		ldr r2, [r1, #TMR_OSCR]
 		cmp r4, r2
-		bgt %b1    
+		;bgt %b1    
 
 		; force 9 cycles to SDRAM : 모든 sdram bank에 CBR(refrash cycle)이 발생한다. 
 		ldr     r2, =SDRAM_BASE_ADDRESS

@@ -19,9 +19,9 @@ void CLEAR_GEDR(void) // Initialize GEDR by setting it true
 void INIT_EDGE(void)
 {
 		GFER1 |= 0x00200000; // Using GPIO53 as Falling Edge
-        // GRER1 |= 0x00200000; // Using GPIO53 as Rising Edge
+        //GRER1 |= 0x00200000; // Using GPIO53 as Rising Edge
         GFER2 |= 0x00080000;
-        // GRER2 |= 0x00080000;
+        //GRER2 |= 0x00080000;
 }
 void INIT_DEVICE(void) // Setting up direction registers and Turning down both LEDs
 {
@@ -63,12 +63,12 @@ int LED_Control(int CTL,int N) // To avoid repetition, Set a flag outside of thi
     		GPCR1 |= 0x00100000;
             GPCR2 |= 0x00040000;
             
-            for(i=0;i<742857;i++);
+            for(i=0;i<7428571;i++); // 100ms Delay
             
 	        GPSR1 |= 0x00100000;
             GPSR2 |= 0x00040000;
 	        
-	        for(i=0;i<742857;i++);
+	        for(i=0;i<7428571;i++); // 100ms Delay
 	        
             break;	
         case ON:
@@ -120,6 +120,16 @@ void Set_Clock(int n) // Range = (2, 6)
 }
 void INIT_INTR(void){ // Initializing Interrupt Registers
 	ICCR = 0x1; // CPU에서 인터럽트 처리할수 있게 해줌.
-	ICLR &= !(1 << 10); // IRQ 발생 (수정 필요)
+	ICLR &= !(1 << 10); // IRQ 발생
 	ICMR |= (1 << 10); // MASK BIT SETTING
+}
+void _delay_ms(int v) 
+{
+	int i,j;
+	for(i=0;i<v;i++)
+	{
+		for(j=0;j<7428;j++)
+		{
+		}
+	}
 }

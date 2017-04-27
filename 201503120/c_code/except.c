@@ -40,6 +40,7 @@ ulong   ExceptionAddr;
 //extern u32 __vectorlist_start;
 //extern u32 __vectorlist_end;
 //extern void usr_handle_sw3(unsigned long a);
+extern void usr_handle_pjy(unsigned long a); // 내가 만든 ISR
 //extern void usr_timer(unsigned long a);
 
 static isrp_t usr_handle_und_instr;
@@ -221,7 +222,9 @@ vinit(void)
         irqtbl[i] = 0;
     }
     
-    //irqtbl[10] = usr_handle_sw3;
+    // interrupt setting
+    // = excute function name
+    irqtbl[10] = usr_handle_pjy; // 활성화 핸들러 테이블에 루틴 저장
     //irqtbl[26] = usr_timer;
     
     return;

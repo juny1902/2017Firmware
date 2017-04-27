@@ -22,7 +22,7 @@ INTOFFSET     EQU    0xA4000000
 		
 IRQ_Handler   ;FUNCTION
 
-   ; 모든 User Mode상의 레지스터(r0 ~ r14)를 store to stack
+   ; 모든 User Mode상의 레지스터(r0 ~ r14)를 store to stack (Context 저장)
     
     
     str r14, [sp, #-4]! 		; push link-addr from r14 to stack 
@@ -30,12 +30,12 @@ IRQ_Handler   ;FUNCTION
    
   ; Put the exception address in r0
       
-    sub r0, r14, #8
+    sub r0, r14, #8 ; 위치 계산
         
     
     ; Call the C function to figure out what happened
     
-    bl handle_irq
+    bl handle_irq ; 모든 레지스터를 stack에 push
 
     
    ; Restore user-mode processor state and return
