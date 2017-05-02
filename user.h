@@ -35,23 +35,23 @@
 
 // Numeric definition for Switch level detection
 #define BOTH 3
-#define SW2 2
-#define SW1 1
+#define SW1 2
+#define SW0 1
 #define NP 0
 
 // Definition of reading from GPLR registers. 
-#define SW1_STAT (!((GPLR1) & (0x00200000))) // To check SW1 status. (Pressed = 1, Released = 0)
-#define SW2_STAT (!((GPLR2) & (0x00080000))) // To check SW2 status. 
+#define SW0_STAT (!((GPLR1) & (0x00200000))) // To check SW1 status. (Pressed = 1, Released = 0)
+#define SW1_STAT (!((GPLR2) & (0x00080000))) // To check SW2 status. 
 
 // Definition of getting from GEDR registers.
-#define GET_EDGE_SW1 ((GEDR1) & (0x00200000)) // Get Edge from GEDR1
-#define GET_EDGE_SW2 ((GEDR2) & (0x00080000)) // Get Edge from GEDR2
+#define GET_EDGE_SW0 ((GEDR1) & (0x00200000)) // Get Edge from GEDR1
+#define GET_EDGE_SW1 ((GEDR2) & (0x00080000)) // Get Edge from GEDR2
 
 // External functions
 extern void vinit(void); // To initialize device
 
 // Delay_mili_second
-void _delay_ms(int v);
+int _delay_ms(int v);
 
 // Definition of functions
 int IS_SW_PRESSED(void); // Return integer value by SW

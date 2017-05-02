@@ -18,8 +18,8 @@ void CLEAR_GEDR(void) // Initialize GEDR by setting it true
 }
 void INIT_EDGE(void)
 {
-		GFER1 |= 0x00200000; // Using GPIO53 as Falling Edge
-        //GRER1 |= 0x00200000; // Using GPIO53 as Rising Edge
+		// GFER1 |= 0x00200000; // Using GPIO53 as Falling Edge
+        GRER1 |= 0x00200000; // Using GPIO53 as Rising Edge
         GFER2 |= 0x00080000;
         //GRER2 |= 0x00080000;
 }
@@ -36,17 +36,17 @@ int IS_SW_PRESSED(void) // Detect GPIO pin levels when it called.
     int dly = 1000; 
     while(dly--); // For debounce
     
-    if(SW1_STAT && SW2_STAT) // BOTH Pressed
+    if(SW0_STAT && SW1_STAT) // BOTH Pressed
     {
         return BOTH;
     }
-    else if(SW1_STAT) // SW1 Pressed, Left
+    else if(SW0_STAT) // SW1 Pressed, Left
     {
-        return SW1;
+        return SW0;
     }
-    else if(SW2_STAT) // SW2 Pressed, Right
+    else if(SW1_STAT) // SW2 Pressed, Right
     {  
-        return SW2;
+        return SW1;
     }
     else // Neither Pressed (Neutral)
     {
@@ -140,7 +140,7 @@ void INIT_INTR(void){ // Initializing Interrupt Registers
 	ICLR &= !(1 << 10); // IRQ ¹ß»ý
 	ICMR |= (1 << 10); // MASK BIT SETTING
 }
-void _delay_ms(int v) // v = 1000 -> 1[sec], Not exact !
+int _delay_ms(int v) // v = 1000 -> 1[sec], Not exact !
 {
 	int i,j;
 	for(i=0;i<v;i++)
@@ -149,4 +149,5 @@ void _delay_ms(int v) // v = 1000 -> 1[sec], Not exact !
 		{
 		}
 	}
+	return 0;
 }
