@@ -1,5 +1,5 @@
-// 201503120 Jun Young Park
-// 170411 - Quiz 1
+﻿// 201503120 Jun Young Park
+// 170501 - Midterm Exam
 
 // Definition of GPIO Registers
 #define GPDR1 (*(volatile int *)0x40e00010) // General Purpose Direction Register 1 (GPIO52)
@@ -15,11 +15,11 @@
 #define CCCR (*(volatile int *)0x41300000) 
 #define MDREFR (*(volatile int *)0x048000004)
 
-#define GEDR1 (*(volatile int *)0x40e0004c) // Edge ���� �������� �߰�
+#define GEDR1 (*(volatile int *)0x40e0004c) // Edge Detect Register
 #define GEDR2 (*(volatile int *)0x40E00050)
-#define GRER1 (*(volatile int *)0x40e00034) // Rising Edge ���� �������� �߰�
+#define GRER1 (*(volatile int *)0x40e00034) // Rising Edge Enable Register
 #define GRER2 (*(volatile int *)0x40E00038)
-#define GFER1 (*(volatile int *)0x40e00040) // Falling Edge ���� �������� �߰�
+#define GFER1 (*(volatile int *)0x40e00040) // Falling Edge Enable Register
 #define GFER2 (*(volatile int *)0x40e00044)
 
 // Numeric definition for LED Control

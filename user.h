@@ -1,5 +1,5 @@
 // 201503120 Jun Young Park
-// 170411 - Quiz 1
+// 170501 - Midterm Exam
 
 // Definition of GPIO Registers
 #define GPDR1 (*(volatile int *)0x40e00010) // General Purpose Direction Register 1 (GPIO52)
@@ -12,15 +12,21 @@
 #define GPLR1 (*(volatile int *)0x40e00004) // GP Load 1 (GPIO53)
 #define GPLR2 (*(volatile int *)0x40e00008) // GP Load 2 (GPIO83)
 
-#define CCCR (*(volatile int *)0x41300000) 
+#define GEDR1 (*(volatile int *)0x40e0004c) // Edge Detect Register
+#define GEDR2 (*(volatile int *)0x40E00050)
+#define GRER1 (*(volatile int *)0x40e00034) // Rising Edge Enable Register
+#define GRER2 (*(volatile int *)0x40E00038)
+#define GFER1 (*(volatile int *)0x40e00040) // Falling Edge Enable Register
+#define GFER2 (*(volatile int *)0x40e00044)
+
+// Definition of Registers for clock setting.
+#define CCCR (*(volatile int *)0x41300000)
 #define MDREFR (*(volatile int *)0x048000004)
 
-#define GEDR1 (*(volatile int *)0x40e0004c) // Edge ���� �������� �߰�
-#define GEDR2 (*(volatile int *)0x40E00050)
-#define GRER1 (*(volatile int *)0x40e00034) // Rising Edge ���� �������� �߰�
-#define GRER2 (*(volatile int *)0x40E00038)
-#define GFER1 (*(volatile int *)0x40e00040) // Falling Edge ���� �������� �߰�
-#define GFER2 (*(volatile int *)0x40e00044)
+// Difinition of Intrrupt Registers
+#define ICLR (*(volatile int *)0x40D00008)
+#define ICCR (*(volatile int *)0x40D00014)
+#define ICMR (*(volatile int *)0x40D00004)
 
 // Numeric definition for LED Control
 #define BLK 2
@@ -38,26 +44,21 @@
 #define SW2_STAT (!((GPLR2) & (0x00080000))) // To check SW2 status. 
 
 // Definition of getting from GEDR registers.
-#define GET_EDGE_SW1 ((GEDR1) & (0x00200000))
-#define GET_EDGE_SW2 ((GEDR2) & (0x00080000))
-
-// Difinition of Intrrupt Registers
-
-#define ICLR (*(volatile int *)0x40D00008)
-#define ICCR (*(volatile int *)0x40D00014)
-#define ICMR (*(volatile int *)0x40D00004)
+#define GET_EDGE_SW1 ((GEDR1) & (0x00200000)) // Get Edge from GEDR1
+#define GET_EDGE_SW2 ((GEDR2) & (0x00080000)) // Get Edge from GEDR2
 
 // External functions
 extern void vinit(void); // To initialize device
 
-// Delay_MS
+// Delay_mili_second
 void _delay_ms(int v);
 
 // Definition of functions
 int IS_SW_PRESSED(void); // Return integer value by SW
 int LED_Control(int CTL,int N); // LED control(N = #LED, CTL = Control)
+void LED_Blink_ms(int N,int ms,int t); // LED #N, interval ms, t times.
 void INIT_DEVICE(void); // Initialize device (Set Direction, LED Initialize)
 void Set_Clock(int n); // Set clock frequency ( Range : 2~6 )
-void INIT_EDGE(void);
-void INIT_INTR(void);
+void INIT_EDGE(void); // To Enable EDGE
+void INIT_INTR(void); // To Enable INT
 void CLEAR_GEDR(void); // Set 1 on GEDR Bit to clear previous GEDR value.

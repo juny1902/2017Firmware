@@ -1,7 +1,7 @@
 /* 
     201503120 Jun Young Park
     PXA270 user library for Firmware Design
-    2017-4-11 Quiz 1
+    2017-05-01 Midterm Exam
 
     With considering :
         1. To make easier to use for developers.
@@ -18,15 +18,15 @@ void CLEAR_GEDR(void) // Initialize GEDR by setting it true
 }
 void INIT_EDGE(void)
 {
-		GFER1 |= 0x00200000; // Using GPIO53 as Falling Edge
-        // GRER1 |= 0x00200000; // Using GPIO53 as Rising Edge
-        GFER2 |= 0x00080000;
-        // GRER2 |= 0x00080000;
+		GFER1 |= 0x00200000; // Using GPIO53 as Falling Edge (When switch is being pressed, It's falling)
+        // GRER1 |= 0x00200000; // Using GPIO53 as Rising Edge (When switch is being released, It's rising)
+        GFER2 |= 0x00080000; // Using GPIO83 ...
+        // GRER2 |= 0x00080000; // Using GPIO83 ...
 }
 void INIT_DEVICE(void) // Setting up direction registers and Turning down both LEDs
 {
     GPDR1 |= (1 << 20); // Using GPIO52 as Output 
- 	GPDR1 &= ~(1 << 18); //Using GPIO53 as Input
+    GPDR1 &= ~(1 << 18); //Using GPIO53 as Input
     GPDR2 |= (1 << 18); // Using GPIO82 as Output
     GPDR2 &= ~(1 << 19); // Using GPIO83 as Input
     // Set_Clock(2); // Initalize Clock
@@ -63,12 +63,12 @@ int LED_Control(int CTL,int N) // To avoid repetition, Set a flag outside of thi
     		GPCR1 |= 0x00100000;
             GPCR2 |= 0x00040000;
             
-            for(i=0;i<742857;i++);
+            for(i=0;i<7428571;i++); // 1 SEC DELAY (It depends on clock speed)
             
 	        GPSR1 |= 0x00100000;
             GPSR2 |= 0x00040000;
 	        
-	        for(i=0;i<742857;i++);
+	        for(i=0;i<7428571;i++); // 1 SEC DELAY (It depends on clock speed)
 	        
             break;	
         case ON:

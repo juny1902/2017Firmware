@@ -1,7 +1,7 @@
 /* 
     201503120 Jun Young Park
-    PXA270 user library for Firmware Design
-    2017-4-11 Quiz 1
+    PXA270 User Library for Firmware Design
+    2017-5-01 Midterm Exam.
 
     With considering :
         1. To make easier to use for developers.
@@ -34,7 +34,7 @@ void INIT_DEVICE(void) // Setting up direction registers and Turning down both L
 int IS_SW_PRESSED(void) // Detect GPIO pin levels when it called.
 {
     int dly = 1000; 
-    while(dly--); // Debounce
+    while(dly--); // For debounce
     
     if(SW1_STAT && SW2_STAT) // BOTH Pressed
     {
@@ -53,24 +53,40 @@ int IS_SW_PRESSED(void) // Detect GPIO pin levels when it called.
         return NP; // Equals to '0'
     }
 }
-int LED_Control(int CTL,int N) // To avoid repetition, Set a flag outside of this function.
+void LED_Blink_ms(int N,int ms,int t) // Blink led '#N' with interval 'ms', for 't' times.
 {
 	int i;
+	for(i=0;i<t;i++)
+	{
+		if(N == 3)
+	    {
+			GPCR1 |= 0x00100000; // Clear GPIO52
+		    GPCR2 |= 0x00040000; // GPIO82
+		    _delay_ms(ms);   
+			GPSR1 |= 0x00100000; // Set GPIO52
+		    GPSR2 |= 0x00040000; // GPIO82
+			_delay_ms(ms);
+		}
+	 	else if(N == 1)
+		{
+			GPCR1 |= 0x00100000;
+			_delay_ms(ms); 
+			GPSR1 |= 0x00100000;  
+			_delay_ms(ms);
+		}
+		else if(N == 2)
+		{
+		    GPCR2 |= 0x00040000;         
+		    _delay_ms(ms);   
+		    GPSR2 |= 0x00040000;
+			_delay_ms(ms);
+		}
+	}
+}
+int LED_Control(int CTL,int N) // To avoid repetition, Set a flag outside of this function.
+{
     switch(CTL)
     {
-    	case BLK: // Regardless the variable N, Both LED will blink once.
-    	 	
-    		GPCR1 |= 0x00100000;
-            GPCR2 |= 0x00040000;
-            
-            for(i=0;i<7428571;i++); // 100ms Delay
-            
-	        GPSR1 |= 0x00100000;
-            GPSR2 |= 0x00040000;
-	        
-	        for(i=0;i<7428571;i++); // 100ms Delay
-	        
-            break;	
         case ON:
             if(N == 1) // Top
             {
@@ -110,6 +126,7 @@ int LED_Control(int CTL,int N) // To avoid repetition, Set a flag outside of thi
 }
 void Set_Clock(int n) // Range = (2, 6)
 {
+			if(n<2 || n>6) return; // To avoid error
 		    CCCR = (1<<25) | (n<<7) | (16<<0); // Turbo Variable(2 to 6), (13MHz * L(16) * N(3))
 			MDREFR |=((1<<29)|(1<<19)|(1<<17)); // From the manual(Clock Setting)
 		    __asm{ // Inline ASM code
@@ -123,7 +140,7 @@ void INIT_INTR(void){ // Initializing Interrupt Registers
 	ICLR &= !(1 << 10); // IRQ ¹ß»ý
 	ICMR |= (1 << 10); // MASK BIT SETTING
 }
-void _delay_ms(int v) 
+void _delay_ms(int v) // v = 1000 -> 1[sec], Not exact !
 {
 	int i,j;
 	for(i=0;i<v;i++)
