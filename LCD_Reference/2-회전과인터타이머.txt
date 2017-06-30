@@ -1,0 +1,93 @@
+#include "config.h" 
+#include "stddefs.h"
+#include "pxa2xx.h"
+#include "16c552.h"
+#include "typedef.h"
+#include "except.h"
+#include "user.h" // 장치 제어 관련 사용자 헤더
+#include "Image.h"
+#include "lcd.h" // LCD 관련 사용자 헤더
+
+#define _STOP_ 0
+#define _CLOCKWISE_ 1
+#define _CCLOCKWISE_ 2
+volatile int stat = 0;
+volatile int angle = 0;
+volatile int led = 0;
+volatile int power = 0;
+void usr_handle_pjy(unsigned long a)
+{
+	if(SW0_STAT && SW1_STAT)
+	{
+		stat = _STOP_;
+	}
+	else if(GET_EDGE_SW0)
+	{
+		stat = _CLOCKWISE_;	
+	}
+	else if(GET_EDGE_SW1)
+	{
+		stat = _CCLOCKWISE_;	
+	}
+	CLEAR_GEDR();
+}
+void usr_timer_pjy(unsigned long a)
+{	
+	if(power)
+	{
+		power = 0;
+		if(stat == _CLOCKWISE_)
+		{
+			LED_Control(ON,1);
+			LED_Control(OFF,2);
+		}
+		else if(stat == _CCLOCKWISE_)
+		{
+			LED_Control(ON,2);
+			LED_Control(OFF,1);
+		}
+		else if(stat == _STOP_)
+		{
+			LED_Control(ON,3);
+		}
+	}
+	else
+	{
+		power = 1;
+		LED_Control(OFF,1);
+		LED_Control(OFF,2);
+	}
+	RESET_TIMER();
+}
+int main(void)
+{
+	int angle = 0;
+	vinit(); // 장치 초기화를 위함
+	GPIO_init(); // GPIO 핀 초기설정을 위함
+	lcd_init(); // LCD 초기화를 위함 
+	INIT_INTR();
+	INIT_TIMER(1000); // 1000[ms] 마다 timer ISR 로 진입.
+	INIT_DEVICE();
+	INIT_EDGE();
+	Clear_BaseFrame(); // Baseframe 클리어
+	
+	while(1)
+	{
+		if(stat == _CLOCKWISE_)
+		{
+			angle += 45;
+			angle %= 360;
+			RotateImage(400-25,240-25,myImage,angle);
+		}
+		else if(stat == _CCLOCKWISE_)
+		{
+			angle -= 45;
+			angle %= 360;
+			RotateImage(400-25,240-25,myImage,angle);
+		}
+		else if(stat == _STOP_)
+		{
+			PrintBMP(400-25,240-25,myImage);
+		}
+	}
+}

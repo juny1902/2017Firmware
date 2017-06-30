@@ -1,0 +1,8 @@
+﻿  stdafx.cpp
+  ImageEncoder.cpp
+c:\users\ese\desktop\firmware design\imageencoder\imageencoder\imageencoder.cpp(14): warning C4101: 'y' :참조되지 않은 지역 변수입니다.
+c:\users\ese\desktop\firmware design\imageencoder\imageencoder\imageencoder.cpp(14): warning C4101: 'x' :참조되지 않은 지역 변수입니다.
+  코드를 생성하고 있습니다...
+  LINK : C:\Users\ese\Desktop\Firmware Design\ImageEncoder\Debug\ImageEncoder.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+  ImageEncoder.vcxproj -> C:\Users\ese\Desktop\Firmware Design\ImageEncoder\Debug\ImageEncoder.exe
+  ImageEncoder.vcxproj -> C:\Users\ese\Desktop\Firmware Design\ImageEncoder\Debug\ImageEncoder.pdb (Partial PDB)

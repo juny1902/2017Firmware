@@ -1,0 +1,64 @@
+#include "config.h" 
+#include "stddefs.h"
+#include "pxa2xx.h"
+#include "16c552.h"
+#include "typedef.h"
+#include "except.h"
+#include "user.h" // 장치 제어 관련 사용자 헤더
+// #include "Image.h"
+#include "lcd.h" // LCD 관련 사용자 헤더
+
+#define _STOP_ 0
+#define _CLOCKWISE_ 1
+#define _CCLOCKWISE_ 2
+volatile int cnt = 0;
+volatile int TICK = 0;
+void usr_handle_pjy(unsigned long a)
+{
+	
+	if(GET_EDGE_SW0)
+	{
+		LED_Control(ON,1);
+		_delay_ms(250);
+		LED_Control(OFF,1);
+		_delay_ms(250);
+		LED_Control(ON,1);
+		_delay_ms(250);
+		LED_Control(OFF,1);
+		_delay_ms(250);
+	}
+	else if(GET_EDGE_SW1)
+	{
+		LED_Control(ON,2);
+		_delay_ms(250);
+		LED_Control(OFF,2);
+		_delay_ms(250);
+		LED_Control(ON,2);
+		_delay_ms(250);
+		LED_Control(OFF,2);
+		_delay_ms(250);
+	}
+	CLEAR_GEDR();
+}
+void usr_timer_pjy(unsigned long a)
+{	
+	LED_Control(ON,3);
+	_delay_ms(1000);
+	LED_Control(OFF,3);
+	_delay_ms(1000);
+	RESET_TIMER();
+}
+int main(void)
+{
+	vinit(); // 장치 초기화를 위함
+	GPIO_init(); // GPIO 핀 초기설정을 위함
+	lcd_init(); // LCD 초기화를 위함 
+	INIT_INTR();
+	INIT_TIMER(1000);
+	INIT_DEVICE();
+	INIT_EDGE();
+	Clear_BaseFrame(); // Baseframe 클리어
+	while(1)
+	{
+	}
+}

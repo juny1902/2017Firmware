@@ -1,0 +1,37 @@
+#include "config.h" 
+#include "stddefs.h"
+#include "pxa2xx.h"
+#include "16c552.h"
+#include "typedef.h"
+#include "except.h"
+#include "user.h" // 장치 제어 관련 사용자 헤더
+// #include "Image.h"
+#include "font_output.h"
+#include "lcd.h" // LCD 관련 사용자 헤더
+#define MULTIPLIER 4
+#define THICKNESS 4
+
+void usr_handle_pjy(unsigned long a)
+{
+}
+void usr_timer_pjy(unsigned long a)
+{	
+}
+int main(void)
+{
+	vinit(); // 장치 초기화를 위함
+	GPIO_init(); // GPIO 핀 초기설정을 위함
+	lcd_init(); // LCD 초기화를 위함 
+	INIT_INTR();
+	INIT_DEVICE();
+	INIT_EDGE();
+	Clear_BaseFrame(); // Baseframe 클리어
+	while(1)
+	{
+		PrintText(100,200,myFont,makeColor(31,0,0));
+		PrintTextScaled(200,200,MULTIPLIER,myFont,makeColor(0,63,0));
+		PrintTextU(300,200,myFont,makeColor(0,0,31));
+		PrintTextB(400,200,THICKNESS,myFont,makeColor(0,63,31));
+		PrintTextI(500,200,myFont,makeColor(31,63,0));
+	}
+}

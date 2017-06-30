@@ -1,0 +1,26 @@
+170511 - Timer Interrupt
+
+인터럽트 관련 : ICMR, ICLR, ICCR
+
+타이머 관련 : OSCR(Initial Value, OSMR(Match Value), OIER(Interrupt Enable), OSSR(Match Check, Status...,Clear(1 넣을시)
+
+타이머 ISR 정의 : 루틴, 상태 CLEAR(OSSR), COUNTER 초기값(OSCR), TIMER 인터럽트 활성화(OIER)
+
+타이머-> 325만번 : 1초
+
+OSCR0 = 0; // 타이머 초기값
+OSMR0 = 3250000; // Matching value
+OIER |= 0x00000001; // 0번 타이머 실행
+Overflow 발생시 Timer Interrupt 발생.
+
+except.c 에서 timer isr 설정.
+
+INTERRUPT PENDING REG
+
+1. 과정중 Timer 중에 새로운 Timer 에 ISR이 발생되지않음
+2. OS가 없기때문에 이처럼 ISR이 중첩되도록 처리해줄순없으나 CPU는 이를 처리할 수단은 있다.
+
+-> 스위치 1초 딜레이동안 100번을 눌렀을때 이것을 알수있다. -> 처리는 SW 설계자 몫
+
+-> 그렇다면 Timer ISR 동작중에 스위치 ISR 이 발생하면 이것을 알수있나?
+

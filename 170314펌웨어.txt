@@ -1,0 +1,30 @@
+데이터시트를 참조하여 소자의 인덱스(D16,D15...)로 부터 CPU
+
+※ PXA270 : 32-bit, 명령어의 길이 32-bit, 데이터버스 32-bit = 4byte
+
+GPIO : General-Purpose Input/Output
+ㄴCPU를 이용하여 통상적으로 제어할수있는것들.
+ㄴ이러한 PIN들은 RAM상의 특정번지에 모두 매핑되어있다.
+ㄴ그러므로 Memory에 값을쓰면 PIN에 값을쓰는것고 같이 작동시킬수있다.
+ㄴGPIO 기능에 모두 명령어를 만들면 명령어가 너무많아지므로 Memory에 직접 값을 할당하도록 설계되었다.
+
+※ GPIO Register
+
+Alternate Function : 세팅을 하면 다른기능으로 사용하는것이 가능하다.
+ㄴ기본적으로 GPIO pin은 Alternate Function이 없더라도 Input/Output 두가지 기능으로 사용할수있다.
+
+GPDR : General-Purpose Direction Register
+ㄴInput/Output 둘중 어떤기능으로 사용할지 결정하는 레지스터
+
+GPSR : General-Purpose Set Register
+ㄴ해당 pin에 1(set)값을 내보낸다.
+
+GPCR : General-Purpose Clear Register
+ㄴ해당 pin에 0(clear)값을 내보낸다.
+
+GPIO pin이 112개인데, 1개의 pin당 0과 1로 1개 bit가 필요하므로
+(32-bit system임에 따라) 32 + 32 + 32 + 32 = 128, 4개의 Register가 필요하다.
+ㄴRegister의 종류가 0~3번까지 4개 있는 이유
+
+미션 : 저번주 코딩내용 명확하게 이해해보자.
+

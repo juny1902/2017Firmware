@@ -1,0 +1,15 @@
+Edge Detect Register
+
+GEDR : just Edge	, 값을 읽음
+
+GRER : Rising Edge	, 세팅
+
+GFER : Falling Edge	, 세팅
+
+1. 어떤 Edge를 Detect할지 선언한다.
+
+2. 선언한 Edge가 Detect되면 GEDR의 값이 변화한다.
+
+퀴즈는 cyber에 올린다. (누락된 파일이 있을수도있다.-> 다시한번 클릭해서 다운받아확인해볼것)
+중간고사 기간에 정상수업합니다.
+

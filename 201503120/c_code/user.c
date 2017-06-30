@@ -1,7 +1,7 @@
 /* 
     201503120 Jun Young Park
-    PXA270 user library for Firmware Design
-    2017-05-01 Midterm Exam
+    PXA270 User Library for Firmware Design
+    2017-5-01 Midterm Exam.
 
     With considering :
         1. To make easier to use for developers.
@@ -18,15 +18,15 @@ void CLEAR_GEDR(void) // Initialize GEDR by setting it true
 }
 void INIT_EDGE(void)
 {
-		GFER1 |= 0x00200000; // Using GPIO53 as Falling Edge (When switch is being pressed, It's falling)
-        // GRER1 |= 0x00200000; // Using GPIO53 as Rising Edge (When switch is being released, It's rising)
-        GFER2 |= 0x00080000; // Using GPIO83 ...
-        // GRER2 |= 0x00080000; // Using GPIO83 ...
+		//GFER1 |= 0x00200000; // Using GPIO53 as Falling Edge
+        GRER1 |= 0x00200000; // Using GPIO53 as Rising Edge
+        //GFER2 |= 0x00080000; // Using GPIO 83...F
+        GRER2 |= 0x00080000; // Using GPIO 83...R
 }
 void INIT_DEVICE(void) // Setting up direction registers and Turning down both LEDs
 {
     GPDR1 |= (1 << 20); // Using GPIO52 as Output 
-    GPDR1 &= ~(1 << 18); //Using GPIO53 as Input
+ 	GPDR1 &= ~(1 << 18); //Using GPIO53 as Input
     GPDR2 |= (1 << 18); // Using GPIO82 as Output
     GPDR2 &= ~(1 << 19); // Using GPIO83 as Input
     // Set_Clock(2); // Initalize Clock
@@ -34,43 +34,59 @@ void INIT_DEVICE(void) // Setting up direction registers and Turning down both L
 int IS_SW_PRESSED(void) // Detect GPIO pin levels when it called.
 {
     int dly = 1000; 
-    while(dly--); // Debounce
+    while(dly--); // For debounce
     
-    if(SW1_STAT && SW2_STAT) // BOTH Pressed
+    if(SW0_STAT && SW1_STAT) // BOTH Pressed
     {
         return BOTH;
     }
-    else if(SW1_STAT) // SW1 Pressed, Left
+    else if(SW0_STAT) // SW1 Pressed, Left
     {
-        return SW1;
+        return SW0;
     }
-    else if(SW2_STAT) // SW2 Pressed, Right
+    else if(SW1_STAT) // SW2 Pressed, Right
     {  
-        return SW2;
+        return SW1;
     }
     else // Neither Pressed (Neutral)
     {
         return NP; // Equals to '0'
     }
 }
-int LED_Control(int CTL,int N) // To avoid repetition, Set a flag outside of this function.
+void LED_Blink_ms(int N,int ms,int t) // Blink led '#N' with interval 'ms', for 't' times.
 {
 	int i;
+	for(i=0;i<t;i++)
+	{
+		if(N == 3)
+	    {
+			GPCR1 |= 0x00100000; // Clear GPIO52
+		    GPCR2 |= 0x00040000; // GPIO82
+		    _delay_ms(ms);   
+			GPSR1 |= 0x00100000; // Set GPIO52
+		    GPSR2 |= 0x00040000; // GPIO82
+			_delay_ms(ms);
+		}
+	 	else if(N == 1)
+		{
+			GPCR1 |= 0x00100000;
+			_delay_ms(ms); 
+			GPSR1 |= 0x00100000;  
+			_delay_ms(ms);
+		}
+		else if(N == 2)
+		{
+		    GPCR2 |= 0x00040000;         
+		    _delay_ms(ms);   
+		    GPSR2 |= 0x00040000;
+			_delay_ms(ms);
+		}
+	}
+}
+int LED_Control(int CTL,int N) // To avoid repetition, Set a flag outside of this function.
+{
     switch(CTL)
     {
-    	case BLK: // Regardless the variable N, Both LED will blink once.
-    	 	
-    		GPCR1 |= 0x00100000;
-            GPCR2 |= 0x00040000;
-            
-            for(i=0;i<7428571;i++); // 1 SEC DELAY (It depends on clock speed)
-            
-	        GPSR1 |= 0x00100000;
-            GPSR2 |= 0x00040000;
-	        
-	        for(i=0;i<7428571;i++); // 1 SEC DELAY (It depends on clock speed)
-	        
-            break;	
         case ON:
             if(N == 1) // Top
             {
@@ -110,6 +126,7 @@ int LED_Control(int CTL,int N) // To avoid repetition, Set a flag outside of thi
 }
 void Set_Clock(int n) // Range = (2, 6)
 {
+			if(n<2 || n>6) return; // To avoid error
 		    CCCR = (1<<25) | (n<<7) | (16<<0); // Turbo Variable(2 to 6), (13MHz * L(16) * N(3))
 			MDREFR |=((1<<29)|(1<<19)|(1<<17)); // From the manual(Clock Setting)
 		    __asm{ // Inline ASM code
@@ -118,8 +135,42 @@ void Set_Clock(int n) // Range = (2, 6)
 		        mcr p14, 0, r0, c6, c0, 0
 			}		
 }
+// ------ 사용 전 except.c 체크가 필요한 함수 ------ //
 void INIT_INTR(void){ // Initializing Interrupt Registers
 	ICCR = 0x1; // CPU에서 인터럽트 처리할수 있게 해줌.
-	ICLR &= !(1 << 10); // IRQ 발생 (수정 필요)
-	ICMR |= (1 << 10); // MASK BIT SETTING
+	ICLR &= !(1 << 10); // IRQ 발생
+	ICMR |= (1 << 10); // MASK BIT SETTING (timer,ext)
+}
+void INIT_TIMER(unsigned int t)
+{
+	ICCR = 0x1; // CPU에서 인터럽트 처리할수 있게 해줌.
+	ICLR &= !(1 << 10); // IRQ 발생
+	ICMR |= (1 << 26); // MASK BIT SETTING (timer,ext)
+	OSCR0 = 0;
+	OSMR0 = _TIMER_CLOCK*t;
+	OIER |= 0x00000001;
+}
+// ------------------------------------------------- //
+void RESET_TIMER(void)
+{
+	OSCR0 = 0; // 타이머의 값을 초기화
+	OSSR |= 0x00000001;
+	OIER |= 0x00000001;
+}
+void DISABLE_TIMER(void)
+{
+	OSCR0 = 0; // 타이머의 값을 초기화
+	OSSR &= 0x00000000;
+	OIER &= 0x00000000;
+}
+int _delay_ms(int v) // v = 1000 -> 1[sec]
+{
+	int i,j;
+	for(i=0;i<v;i++)
+	{
+		for(j=0;j<7428;j++)
+		{
+		}
+	}
+	return 0;
 }

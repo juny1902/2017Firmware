@@ -1,0 +1,101 @@
+JFlashmm.exe bulbcx output.bin
+
+---------------------------------------------------------------------------
+보강날짜 : 월요일 저녁
+---------------------------------------------------------------------------
+
+※ Code 미리 백업!
+
+// 결과 : 아래에서 2번째 LED ON
+#define GPDR1 (*(volatile int *)0x40e00010) // GPDR1 = 40e00010 주소에 저장되있는 값
+#define GPCR1 (*(volatile int *)0x40e00028) // "Integer Type"의 4바이트 값
+
+int main()
+{
+	GPDR1 |= 0x00100000; // 기존값은 유지한채로 1로 되있는 위치의 Bit만
+			     // ORing으로 1로 만들어준다.
+
+	GPCR1 |= 0x00100000; // LED가 켜지는 Line
+}
+
+---------------------------------------------------------------------------
+
+// 결과 : 아래에서 1번째 LED ON
+#define GPDR2 (*(volatile int *)0x40e00014)
+#define GPCR2 (*(volatile int *)0x40e0002c)
+
+int main()
+{
+	GPDR2 |= 0x00040000; // 기존값은 유지한채로 4로 되있는 위치의 Bit만
+	GPCR2 |= 0x00040000; // ORing으로 1로 만들어준다.
+}
+
+---------------------------------------------------------------------------
+
+// 예상결과 : LED가 켜졌다가 꺼진다.
+// 실제결과 : LED가 꺼진다. (너무빠르다)
+#define GPDR1 (*(volatile int *)0x40e00010)
+#define GPCR1 (*(volatile int *)0x40e00028)
+#define GPSR1 (*(volatile int *)0x40e0001c)
+
+int main()
+{
+	GPDR1 |= 0x00100000; // 기존값은 유지한채로 1로 되있는 위치의 Bit만
+	GPCR1 |= 0x00100000; // ORing으로 1로 만들어준다.
+	GPSR1 |= 0x00100000; // LED가 꺼지는 Line
+}
+
+---------------------------------------------------------------------------
+
+// 결과 : LED가 주기적으로 점멸한다.
+#define GPDR1 (*(volatile int *)0x40e00010)
+#define GPCR1 (*(volatile int *)0x40e00028)
+#define GPSR1 (*(volatile int *)0x40e0001c)
+
+int main()
+{
+	int i = 0;
+	
+	while(1)
+	{
+		GPDR1 |= 0x00100000; 
+		GPCR1 |= 0x00100000; 
+		for(i=0;i<1000000;i++); // delay
+		GPSR1 |= 0x00100000;
+		for(i=0;i<1000000;i++);
+	}
+	
+}
+
+---------------------------------------------------------------------------
+
+// 2개 LED가 반복하여 점등
+#define GPDR1 (*(volatile int *)0x40e00010)
+#define GPCR1 (*(volatile int *)0x40e00028)
+#define GPSR1 (*(volatile int *)0x40e0001c)
+#define GPDR2 (*(volatile int *)0x40e00014)
+#define GPCR2 (*(volatile int *)0x40e0002c)
+#define GPSR2 (*(volatile int *)0x40e00020)
+
+int main()
+{
+	int i = 0;
+	GPDR1 |= 0x00100000;
+	GPDR2 |= 0x00040000;
+	while(1)
+	{
+		 
+		GPCR1 |= 0x00100000; 
+		for(i=0;i<1000000;i++); // delay
+		GPSR1 |= 0x00100000;
+		GPCR2 |= 0x00040000;
+		for(i=0;i<1000000;i++);
+		GPSR2 |= 0x00040000;
+		
+	}
+	
+}
+
+---------------------------------------------------------------------------
+
+미션 : 회로도, 메뉴얼 받아놓을것.

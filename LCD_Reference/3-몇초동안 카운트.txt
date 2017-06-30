@@ -1,0 +1,61 @@
+#include "config.h" 
+#include "stddefs.h"
+#include "pxa2xx.h"
+#include "16c552.h"
+#include "typedef.h"
+#include "except.h"
+#include "user.h" // 장치 제어 관련 사용자 헤더
+// #include "Image.h"
+#include "lcd.h" // LCD 관련 사용자 헤더
+
+#define _STOP_ 0
+#define _CLOCKWISE_ 1
+#define _CCLOCKWISE_ 2
+volatile int cnt = 0;
+volatile int TICK = 0;
+void usr_handle_pjy(unsigned long a)
+{
+	if(TICK < 5) // 타이머가 5초를 세는 동안, 혹은 시작되지 않은 경우
+	{
+		if(GET_EDGE_SW0) // 왼쪽 버튼을 누르면 타이머 시작
+		{
+			INIT_TIMER(1000); // 1000[ms] 마다 timer ISR 로 진입.
+		}
+		else if(GET_EDGE_SW1) // 오른쪽 버튼을 누르면 카운트 하나씩 증가
+		{
+			cnt++;
+		}
+	}
+	CLEAR_GEDR();
+}
+void usr_timer_pjy(unsigned long a)
+{	
+	if(TICK < 5) // 타이머가 5초를 세는 동안 TICK 하나씩 증가함. 5초 내라는것을 알리기 위해 LED 켜줌
+	{
+		LED_Control(ON,3);
+		TICK ++;
+	}
+	else // 타이머가 끝나면
+	{
+		TICK = 0;
+		LED_Blink_ms(3,150,cnt);
+		cnt = 0;
+		LED_Control(OFF,3); 
+	}
+	RESET_TIMER();
+}
+int main(void)
+{
+	vinit(); // 장치 초기화를 위함
+	GPIO_init(); // GPIO 핀 초기설정을 위함
+	lcd_init(); // LCD 초기화를 위함 
+	INIT_INTR();
+	
+	INIT_DEVICE();
+	INIT_EDGE();
+	Clear_BaseFrame(); // Baseframe 클리어
+	
+	while(1)
+	{
+	}
+}

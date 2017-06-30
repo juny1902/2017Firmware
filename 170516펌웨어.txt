@@ -1,0 +1,24 @@
+UART 실습 한번 / LCD 4주동안 진행(응용위주)
+
+에뮬레이터를 설치해야한다.
+
+Tx_string / Rx_string은 직접제작 (char를 반복)
+
+LED의 기본설정 = lcd_init()
+GPIO_init()은 직접제작된것을 사용
+
+Clear_BaseFrame() -> 다음시간
+
+Put_PixelBaseFrame() : x,y에 color의 점하나를 찍는다. 
+(color = 2Byte = R/G/B, 5/6/5 bit씩 할당 = 사람의 눈은 Green을 잘 인식하기때문)
+
+좌표체계
+좌상단 0,0
+우하단 799,479
+(0~800, 0~480 = 800x480 size LCD)
+
+-> Put_Pixel을 for loop 두개로 반복 -> 2차원 -> 사각형
+
+1. 점을 찍을수있는가
+2. 원하는 색의 사각형을 출력할수있는가
+
